@@ -897,7 +897,7 @@ function All(){
 	Series=loadData("2.", "Bar");
 	barChart("#2","2 - Em qual área você atua?", Series);
 	
-	createTable("3",  "3 - Qual é a sua principal atividade? Se for estudante, em qual instituição/curso?")
+	//createTable("3",  "3 - Qual é a sua principal atividade? Se for estudante, em qual instituição/curso?")
 	
 	createBoxesCharts("4");//cria  div html com o id 1
 	alterHeight("4","300px")
