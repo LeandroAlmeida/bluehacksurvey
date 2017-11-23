@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Mobile Survey</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/bootstrap-select.css">
+	<link rel="stylesheet" href="css/font-awesome.min.css">
+    <link href="css/simple-sidebar.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+	<!-- jQuery -->
+    <script src="js/jquery-3.1.1.min.js"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+	<script src="js/highcharts.js"></script>
+	<script src="js/exporting.js"></script>
+	<script src="js/papaparse.min.js"></script>
+	<script src="js/scripts.js"></script>
+	<script src="js/drilldown.js"></script>
+	<script src="js/bootstrap-select.js"></script>
+
+</head>
+
+<body>
+	
+	<!-- Navigation -->
+	
+	 <!-- Navigation -->
+     <nav class="navbar navbar-inverse navbar-fixed-top" id="navTop" role="navigation">
+         <div class="container-fluid" id="textNav">
+            <p id="textNavBarTop" style="text-align: left; font-size: 20px; margin-top: 11px;"><i><a href="#">BlueHack Survey</a></i> &emsp; <span style="font-size: 16px;"><a href="#about">About</a></span> <!--  <span style="float: right;  margin-top: -5px; font-size: 28px;"> <a href="#Menu" id="menu"><i class="fa fa-bars" aria-hidden="true"></i></a></span>  --> </p>       
+         </div>
+         <!-- /.container -->
+     </nav>
+	
+    <!--
+        <div class="col-12" id="navbartop">
+	     <p id="textNavBarTop" style="text-align: left; font-size: 20px; margin-left: 60px;margin-right: 80px; margin-top: 11px;"><i><a href="#">Mobile Survey</a></i> &emsp; <span style="font-size: 16px;"><a href="#about">About</a></span> <span style="float: right;  margin-top: -5px; font-size: 28px;"> <a href="#Menu" id="menu"><i class="fa fa-bars" aria-hidden="true"></i></a></span></p>
+        
+        </div> -->
+        <!-- /.container -->
+   
+
+    
+
+        <!-- Sidebar -->
+        <!--
+        <div id="sidebar-wrapper">
+            <h3 style="margin-left: 20px; margin-bottom: 20px;"><i>Filter by:</i></h3>
+	                
+	                <div class="form-group">
+		                <label for="inlineFormCustomSelect" style="margin-left: 20px; font-size: 16px;margin-right: 66px">Team:</label>
+		                
+			                <select class="custom-select" id="team" onChange="setSelect('team', this.value)" style="width: 100px; position: relative">
+							  <option value="---" selected>---</option>
+							  <option value="Yes">Yes</option>
+							  <option value="No">No</option>
+							</select>
+		                
+	                </div>
+					
+					<div class="form-group">
+						<label for="inlineFormCustomSelect" style="margin-left: 20px; font-size: 16px;margin-right: 42px;">Platform:</label>
+						
+							<select class="custom-select" id="platform" onChange="setSelect('platform', this.value)" style="width: 100px;">
+							  <option value="---" selected>---</option>
+							  <option value="Android">Android</option>
+							  <option value="iOS">iOS</option>
+							</select>
+						
+					</div>
+					
+					<div class="form-group">
+						<label for="inlineFormCustomSelect" style="margin-left: 20px; font-size: 16px;">Professionally:</label>
+						
+							<select class="custom-select" id="professionally" onChange="setSelect('professionally', this.value)" style="width: 100px;">
+							  <option value="---" selected>---</option>
+							  <option value="professionally">professionally</option>
+							  <option value="non-professionally">non-professionally</option>
+							  <option value="open source projects">open source projects</option>
+							</select>
+						
+					</div>
+					
+			<h3 id="dataset" style="margin-left: 20px; margin-bottom: 20px; margin-top: 40px; visibility: hidden;"><i>Dataset from:</i></h3>
+            <form id="formDataset" class="form-inline" style="margin-left: 20px; visibility: hidden;">
+			   <div class="form-group">
+			    
+			     <label class="radio-inline">
+			     <input id="inlineradio1" name="sampleinlineradio" value="github" type="radio" onchange="setSelect('Radio', this.value)" checked>
+			     1° Github</label>
+			    <label class="radio-inline">
+			     <input id="inlineradio2" name="sampleinlineradio" value="list" type="radio" onchange="setSelect('Radio', this.value)">
+			     Professionals-list</label>
+			    <br />
+			    <label class="radio-inline">
+			     <input id="inlineradio3" name="sampleinlineradio" value="github2" type="radio" onchange="setSelect('Radio', this.value)">
+			     2° GitHub</label>
+			    </div>
+			   <!--form-group ->-
+			 </form>
+					
+        </div>
+        -->
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        
+            <div class="container-fluid"  style="padding-top: 60px;  margin-left: 15px; margin-right: 15px;">
+                <div class="row">
+					<h2 style="text-align: center;">Why develop for Android? Why for iOS? Why for any of the other mobile platforms?</h2>
+        		</div>
+        		<div class="row">
+	        		<h4 style="text-align: justify; margin-left: 15px; margin-right: 15px;"> Texto introdutório (...) </h4>
+        		</div>
+        		<div class="row">
+		            <div id="container" >
+			            <div id="temp">
+							<h4 style="text-align: center"> Loading... <i class="fa fa-refresh fa-spin fa-fw"></i><h4>
+							<script>
+								start();
+							</script>
+						</div>
+					</div>
+				</div>
+                
+                <div class="row">
+					
+					<div class="container-fluid" id="about">
+					    <hr>
+					    <div class="row">
+				            <div class="col-sm-6">
+				                <h2>Sobre a pesquisa</h2>
+				                <p>Nós somos pesquisadores de três instituições de ensino superior do Brasil. Nós queremos investigar a motivação para participação do Blue|Hack 2017 e como essa participação pode influência na adoção dos sistemas da IBM.</p>
+				                <p>Esta é uma pesquisa puramente acadêmica, sem interesse comercial algum. Todas as informações estão sendo tratadas e arquivadas de forma anônima e os resultados serão publicados abertamente através do site do nosso grupo de pesquisa (<a href="http://coopera.github.io/"> Coopera </a>) e também através de conferências e periódicos na área. </p>
+				  
+				            </div>
+				            <div class="col-sm-6">
+				                <h2>Contatos</h2>
+				                <address>
+				                	<p>Cleidson de Souza (Federal University of Pará, Brazil) - <a href="mailto:cleidson.desouza@acm.org"><i class="fa fa-envelope-square" style="font-size:18px"></i></a></p>
+									<p>Fernando Figueira Filho (Federal University of Rio Grande do Norte, Brazil) - <a href="mailto:fernando@dimap.ufrn.br"><i class="fa fa-envelope-square" style="font-size:18px"></i></a></p>
+									<p>Sabrina Marczak (PUCRS, Brazil) - <a href="mailto:sabrina.marczak@pucrs.br"><i class="fa fa-envelope-square" style="font-size:18px"></i></a></p>
+									
+				                </address>
+				            </div>
+				        </div>
+				        <!-- /.row -->
+				
+				    </div>
+	
+                </div>    
+            </div>
+            <div class="row">
+	            <footer class="footer-distributed">
+			        <hr>
+					<div class="row">
+						
+						<h4 style="text-align: right;  margin-right:48px;">Share in:</span> </h4>							
+						
+						<p style="text-align: right"><a href="javascript:share('facebook');"><i class="fa fa-facebook-square" aria-hidden="true" style="font-size:32px;"></i></a> 
+						<a href="javascript:share('twitter');"><i class="fa fa-twitter-square" aria-hidden="true" style="font-size:32px;"></i></a> 
+						<a href="javascript:share('linked');"><i class="fa fa-linkedin-square" aria-hidden="true" style="font-size:32px;"></i></a>
+						<a href="javascript:share('google+');"><i class="fa fa-google-plus-square" aria-hidden="true" style="font-size:32px;"></i></a></p>								
+					</div>
+		
+				</footer>
+			</div>
+		
+    <!-- /#page-content-wrapper -->
+    <!-- /#wrapper -->
+	
+	
+	
+	
+	<!-- teste footer
+	<div id="footer" style="background:#f88; position: relative; bottom:0; width:100%; height:60px;">
+		<h2>Why develop for Android? Why for iOS? Why for any of the other mobile platforms?</h2>
+		
+	</div>
+	-->
+    <!-- Menu Toggle Script 
+    <script>
+    $("#menu").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    </script>
+    -->
+
+</body>
+
+</html>

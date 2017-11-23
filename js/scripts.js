@@ -1,0 +1,855 @@
+var answers={};//dataset atual, em exibição
+var githubAnswers={};
+var githubAnswers2={};
+var listAnswers={};
+var current=""
+var team = "Both";
+var platform = "Both";
+var professionally = "Both";
+
+
+function createBoxesCharts(id){
+	c=document.getElementById("container");
+	
+	//first - colocar um for para os demais gráficos
+	var divRow = document.createElement("div");
+	divRow.class="row"
+	var divChart=document.createElement("div");
+	divChart.id=id;
+	linne=document.createElement("hr");
+	c.appendChild(linne)
+	divRow.appendChild(divChart)
+	c.appendChild(divRow)
+	
+}
+
+function alterMinHeight(id,h){
+	var div=document.getElementById(id);
+	div.style.minHeight = h;
+}
+
+function alterHeight(id,w){
+	var div=document.getElementById(id);
+	div.style.height = w;
+}
+
+function clearBox(elementID){    	
+	document.getElementById(elementID).innerHTML = "";
+	
+	}
+	
+function share(name){
+	if(name=="facebook"){
+		window.open('http://www.facebook.com/sharer.php?u=https://mobile--survey.herokuapp.com/', '_blank','toolbar=no,menubar=no,resizable=yes,scrollbars=yes,width=500,height=500');
+	}else if(name=="twitter"){
+		window.open('https://twitter.com/share?url=https://mobile--survey.herokuapp.com/', '_blank','toolbar=no,menubar=no,resizable=yes,scrollbars=yes,width=500,height=500');
+	}else if(name=="google+"){
+		window.open('http://plus.google.com/share?url=https://mobile--survey.herokuapp.com/', '_blank','toolbar=no,menubar=no,resizable=yes,scrollbars=yes,width=500,height=500');
+	}else if(name=="linked"){
+		window.open('http://www.linkedin.com/shareArticle?mini=true&url=https://mobile--survey.herokuapp.com/', '_blank','toolbar=no,menubar=no,resizable=yes,scrollbars=yes,width=500,height=500');
+	}
+}
+	
+
+function pieChart(id, t,Series){
+	$(function () {
+	            $(id).highcharts({
+	                chart: {
+		                //shadow: true,
+	                    plotBackgroundColor: null,
+	                    plotBorderWidth: null,
+	                    plotShadow: false,
+	                    type:"pie"
+	                },
+	                title: {
+		                align:"left",
+	                    text: t
+	                },
+	                //subtitle:{
+	                //    text: 'mipagina.com'
+	                //},
+	                tooltip: {
+	                    pointFormat: '{series.name}: {point.y} (<b>{point.percentage:.1f}%</b>)'
+	                },
+	                plotOptions: {
+	                     pie: {
+						 	allowPointSelect: true,
+						 	cursor: 'pointer',
+						 	dataLabels: {
+						 		enabled: true,
+						 		format: '{point.percentage:.1f} %',
+			                    distance: -30,
+			                    style: {
+			                        fontWeight: 'bold',
+			                        color: 'white'
+			                    }
+			                },
+							showInLegend: true
+                		}
+	                },
+	                credits: {
+			            enabled: false
+			        },
+	                series: [{
+					         name: 'Amount',
+					         colorByPoint: true,
+					         data: Series
+					        }]
+	            });
+	        });
+}
+
+function pieChartWithDrill(id, t,Series, SeriesDrill){
+	$(function () {
+	            $(id).highcharts({
+	                chart: {
+		                //shadow: true,
+	                    plotBackgroundColor: null,
+	                    plotBorderWidth: null,
+	                    plotShadow: false,
+	                    type:"pie"
+	                },
+	                title: {
+		                align:"left",
+	                    text: t
+	                },
+	                subtitle: {
+		                align:"left",
+	                    text:"Click in 'Yes' slice to view the platforms"
+	                },
+	                //subtitle:{
+	                //    text: 'mipagina.com'
+	                //},
+	                tooltip: {
+	                    pointFormat: '{point.y} (<b>{point.percentage:.1f}%</b>)'
+	                    
+	                },
+	                plotOptions: {
+	                     pie: {
+						 	allowPointSelect: true,
+						 	cursor: 'pointer',
+						 	dataLabels: {
+						 		enabled: true,
+						 		format: '{point.percentage:.1f} %',
+			                    distance: -30,
+			                    style: {
+			                        fontWeight: 'bold',
+			                        color: 'white'
+			                    }
+			                },
+							showInLegend: true
+                		}
+	                },
+	                credits: {
+			            enabled: false
+			        },
+	                series: [{
+					         name: 'Experiences',
+					         colorByPoint: true,
+					         data: Series
+					        }],
+					drilldown:{
+						
+						series:[{
+							name: 'Platforms',
+			                id: 'Yes',
+			                data: SeriesDrill
+						
+						}]
+					}
+	            });
+	        });
+}
+
+function barChart(id,t,Series){
+	
+	$(function () {
+    	$(id).highcharts({
+
+	        title: {
+		        align:"left",
+	            text: t
+	        },
+	        chart: {
+	                inverted: true,
+	                //shadow: true,
+	                polar: false
+	            },
+	        xAxis: {
+	            categories: Series["x"]
+	        },
+	        yAxis: {
+	            title: {
+	                text: 'Amount'
+	            }
+	        },
+	        tooltip: {
+	            pointFormat: 'Amount: <b>{point.y} answers</b>'
+	        },
+	        credits: {
+	            enabled: false
+	        },
+	
+	        series: [{
+	            type: 'column',
+	            colorByPoint: false,
+	            data: Series["y"],
+	            showInLegend: false,
+	            dataLabels: {
+	                enabled: true,
+	                color: '#FFFFFF',
+	                align: 'right',
+	                format: '{point.y}', 
+	                //y: 10, // 10 pixels down from the top
+	                style: {
+	                    fontSize: '12px',
+	                    fontFamily: 'Verdana, sans-serif'
+	                }
+	            }
+	        }]
+
+    });
+	});
+}
+
+function getSeriesTo9and12(Series,id, type){
+	//Coloquei 13, mas podeia ser Object.keys(Series).length caso tenham tam diferentes
+	id=id.replace("#", "");
+	id+=".";//Pega o id e transforma no formato da question na planilha, ex: #9->9. e depois no for fica 9.1 até 9.13
+	listResul=[];
+	for(i=1;i<=4; i++){
+		listResul.push(Series[id+i][type]);
+	}
+	return listResul;
+}
+
+function getSeriesToGroupColumnChart(id, Series){
+	if(id=="#7"){
+		return [{	name: "Bem definido(a)",
+					data: getSeriesTo9and12(Series, id,"Bem definido(a)")
+				}, {
+					name:"Parcialmente definido(a)",
+					data:getSeriesTo9and12(Series, id,"Parcialmente definido(a)")
+				}, {
+					name:"Somewhat influential",
+					data:getSeriesTo9and12(Series, id,"Indefinido(a)")
+				}];
+	}
+		
+}
+function getCategoriesTogroupColumnChart(id){
+	
+	if(id=="#7"){
+		return["Eu já tinha uma ideia", "Eu já tinha uma equipe", "Eu já tinha um desafio", "Eu já tinha uma tecnologia"];
+	}
+	
+}
+function getSubTitleToGroupColumnChart(id){
+	if (id=="#7"){
+		return "";
+	}
+}
+function groupColumnChart(id,t,Series){
+
+	
+	$(function () {
+		$(id).highcharts({
+	        chart: {
+		        //shadow: true,
+	            type: 'column'
+	        },
+	        title: {
+		        align:"left",
+	            text: t
+	        },
+	        xAxis: {
+	            categories: getCategoriesTogroupColumnChart(id),
+	            crosshair: true
+	        },
+	        subtitle: {
+		        align:"left",
+	            text: getSubTitleToGroupColumnChart(id)           
+        	},
+	        yAxis: {
+	            min: 0,
+	            title: {
+	                text: 'Amount'
+	            }
+	        },
+	        tooltip: {
+	            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+	            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+	                '<td style="padding:0"><b>{point.y} </b></td></tr>',
+	            footerFormat: '</table>',
+	            shared: true,
+	            useHTML: true
+	        },
+	        plotOptions: {
+	            column: {
+	                pointPadding: 0.1,
+	                borderWidth: 0
+	            }
+	        },
+	        credits: {
+			            enabled: false
+			        },
+	        series: getSeriesToGroupColumnChart(id, Series)
+	    });
+	});	
+}
+function getSeriesToBarStacked(Series, id, type){
+	
+	//Coloquei 13, mas podeia ser Object.keys(Series).length caso tenham tam diferentes
+	id=id.replace("#", "");
+	id+=".";//Pega o id e transforma no formato da question na planilha, ex: #9->9. e depois no for fica 9.1 até 9.13
+	listResul=[];
+	for(i=1;i<=14; i++){
+		listResul.push(Series[id+i][type]);
+	}
+	return listResul;
+	
+}
+function barStacked(id,t,Series){
+	$(function () {
+		$(id).highcharts({
+		    chart: {
+		        type: 'bar'
+		    },
+		    title: {
+		        text: t
+		    },
+		    xAxis: {
+		        categories: ['Programming language(s) used to develop for that platform', 'Software development tools and SDKs available to develop for that platform', 
+		        			'Services, APIs and libraries available to develop for that platform', 'Documentation available to develop for that platform', 
+		        			'Availability of different devices from different manufacturers', 'Availability of different devices from different manufacturers',
+		        			'Compatibility with tools that allow for multi-platform development (e.g., PhoneGap, Xamarim, etc)','Market share of the platform.',
+		        			'Platform business model including fees, licensing model, partnerships, etc','Expected financial return from the platform',
+		        			'Requirements for distributing applications to users of that platform','Extensive and supportive ONLINE community (e.g. online groups, forums, etc)',
+		        			'Extensive and supportive LOCAL community (e.g. local meetups, friends and co-workers who develop for the same platform).','Platform evangelists.',
+		        			"I did NOT have a choice on selecting the platform (e.g., this was my company's decision, or a customer requirement, etc)"]
+		    },
+		    yAxis: {
+		        min: 0,
+		        title: {
+		            text: 'Total fruit consumption'
+		        }
+		    },
+		    legend: {
+		        reversed: true
+		    },
+		    plotOptions: {
+		        series: {
+		            stacking: 'normal'
+		        }
+		    },
+		    series: [{
+		        name: "Very influential",
+		        data: getSeriesTo9and12(Series, id,"Very influential")
+			    }, {
+			        name: "Influential",
+			        data: getSeriesTo9and12(Series, id,"Influential")
+			    }, {
+			        name: "Somewhat influential",
+			        data: getSeriesTo9and12(Series, id,"Somewhat influential")
+			    }, {
+			        name: "Not influential",
+			        data: getSeriesTo9and12(Series, id,"Not influential")
+			    }, {
+			        name: "Not at all influential",
+			        data: getSeriesTo9and12(Series, id,"Not at all influential")
+			    }]
+		});
+	});
+}
+
+
+function columnChart(id, t, Series){
+	$(function () {
+	    $(id).highcharts({
+	        chart: {
+	            type: 'column'
+	        },
+	        title: {
+		        align:"left",
+	            text: t
+	        },
+	        xAxis: {
+	            type: 'category',
+	            labels: {
+	                rotation: -45,
+	                style: {
+	                    fontSize: '13px',
+	                    fontFamily: 'Verdana, sans-serif'
+	                }
+	            }
+	        },
+	        yAxis: {
+	            min: 0,
+	            title: {
+	                text: 'Amount'
+	            }
+	        },
+	        legend: {
+	            enabled: false
+	        },
+	        tooltip: {
+	            pointFormat: 'Amount: <b>{point.y} answers</b>'
+	        },
+	        credits: {
+	            enabled: false
+	        },
+	        series: [{
+	            name: 'Population',
+	            data:Series,
+	            dataLabels: {
+	                enabled: true,
+	                rotation: -90,
+	                color: '#FFFFFF',
+	                align: 'right',
+	                format: '{point.y}', // one decimal
+	                y: 10, // 10 pixels down from the top
+	                style: {
+	                    fontSize: '13px',
+	                    fontFamily: 'Verdana, sans-serif'
+	                }
+	            }
+	        }]
+	    });
+	});
+}
+/*
+function setSelect(id, valor){
+	if(id=="team"){
+		if(valor=="---"){
+			team="Both";
+		}else if(valor=="Yes"){
+			team="Yes, I typically develop apps in a team, i.e, with others";
+		}else{
+			team="No, I typically develop apps by myself";
+		}
+	}else if(id=="platform"){
+		if(valor=="---"){
+			platform="Both";
+		}else if(valor=="Android"){
+			platform="Android";
+		}else{
+			platform="iOS";
+		}
+	}else if(id=="professionally"){
+		if(valor=="---"){
+			professionally="Both";
+		}else if(valor=="professionally"){
+			professionally="Yes, professionally";
+		}else if(valor=="non-professionally"){
+			professionally="Yes, non-professionally -- e.g., pet projects, course assignments, ...";
+		}else{
+			professionally="Yes, I have already contributed to one or more open source projects (irrespective of size)";
+		}
+		//console.log(professionally);
+	}else if(id=="Radio"){
+		if(valor=="github"){
+			current="GitHub"
+			answers=githubAnswers;
+		}else if(valor=="list"){
+			current="List"
+			answers=listAnswers;
+		}
+		else{
+			current="GitHub2"
+			answers=githubAnswers2;
+		}
+	}
+	All();
+		
+}
+*/
+
+function filters(linha){
+	/*if(team != "Both"){
+		if(answers[linha]["3."]==null || answers[linha]["3."]=="" ||answers[linha]["3."]!=team){
+			return false;
+		}
+	}
+	
+	if(platform != "Both"){
+		if(answers[linha]["4."]==null || answers[linha]["4."]=="" || answers[linha]["4."]!=platform){
+			return false;
+		}
+	}
+	
+	if(professionally != "Both"){
+		if(answers[linha]["2."]==null || answers[linha]["2."]=="" || answers[linha]["2."].indexOf(professionally) == -1){
+			return false;
+		}
+	}*/
+	
+	return true;
+}
+/*
+function question_5(data){
+	var Data={"1 app":0,"2 to 5 apps":0, "6 to 10 apps":0,"Over 10 apps":0};
+	for (var key in data) {
+		if(key==1){
+			Data["1 app"]=data[key];
+		}else if(key>=2 && key<=5){
+			Data["2 to 5 apps"]+=data[key];
+		}else if(key>=6 && key<=10){
+			Data["6 to 10 apps"]+=data[key];
+		}else{
+			Data["Over 10 apps"]+=data[key];
+		}
+	    
+	}
+
+	return Data;
+}
+
+function question_6(data){
+	var Data={"Lass than 1 year":0, "1 to 3 year(s)":0,"]3 to 5 years":0, "Over 5 years":0};
+	for (var key in data) {
+		if(key>=1 && key<12){
+			Data["Lass than 1 year"]+=data[key];
+		}else if(key>=12 && key<=36){
+			Data["1 to 3 year(s)"]+=data[key];
+		}else if(key>=37 && key<=60){
+			Data["]3 to 5 years"]+=data[key];
+		}else{
+			Data["Over 5 years"]+=data[key];
+		}
+	    
+	}
+
+	return Data;
+}*/
+
+function getData(column,type){
+	var data={};
+	if(type=="Pie"){
+		for (var i = 0; i < answers.length; i++){
+			if(answers[i][column]!=null && answers[i][column]!=""){
+				if(filters(i)){
+					if(data.hasOwnProperty(answers[i][column])){
+						data[answers[i][column]]+=1;
+					}else{
+						data[answers[i][column]]=1;
+					}
+				}
+			}
+	    }
+	}else if(type=="Column" || type=="Bar"){
+		for (var i = 0; i < answers.length; i++){
+			if(answers[i][column]!=null && answers[i][column]!=""){
+				if(filters(i)){
+					Splits=answers[i][column].split(";");
+					for(var j=0;j<Splits.length;j++){
+						if(data.hasOwnProperty(Splits[j])){
+						data[Splits[j]]+=1;
+						}else{
+							data[Splits[j]]=1;
+						}
+					}
+				}
+				
+			}
+			
+		}
+		var others=0;//melhorar depois
+		for (var key in data) {
+			if(data[key]==1){
+				others++;
+				delete data[key];
+			}
+		}
+		if (others!=0){
+			data["Others"]=others;
+		}
+		
+		
+	}else if(type=="groupColumnChart"){
+		var dataTemp, columnName;
+		if(column=="8." || column=="11."){
+			aspects=["Technical_aspects","Business_aspects","Social_Aspects"];
+			for(var i=0;i<aspects.length;i++){
+				columnName=column+aspects[i];
+				if(current=="GitHub"){
+					dataTemp={"Very influential": 0, "Somewhat influential": 0, "Not at all influential": 0};
+				}
+				else{
+					dataTemp={"Very influential": 0, "Influential":0, "Somewhat influential": 0, "Not influential":0, "Not at all influential": 0};
+				}
+					
+				for (var j = 0; j < answers.length; j++){
+					if(answers[j][columnName]!=null && answers[j][columnName]!=""){
+						if(filters(j)){
+							dataTemp[answers[j][columnName]]+=1;
+						}
+					}
+				}
+				data[aspects[i]]=dataTemp;
+			}
+		}else if (column=="7."){
+			
+			for(var i=1;i<=4;i++){
+				columnName=column+i;//9.1 ate 9.13 e 12.1 ate 12.13, colunas da planilha
+				dataTemp={"Bem definido(a)": 0, "Parcialmente definido(a)":0, "Indefinido(a)": 0};	
+				for (var j = 0; j < answers.length; j++){
+					if(answers[j][columnName]!=null && answers[j][columnName]!=""){
+						if(filters(j)){
+							dataTemp[answers[j][columnName]]+=1;
+						}
+					}
+				}
+				data[columnName]=dataTemp;
+			}
+		}
+		//console.log(data);
+	}
+	
+	return data;
+}
+
+	
+function loadData(column, type){
+	var Data=getData(column,type);
+	var Series=[];
+	if(type=="Pie"){//preparar dados para grafico pizza
+		var nameKeySliced="";
+		var aux=0;
+		/*if(column=="5.1"){
+			Data=question_5(Data);
+		}
+		if(column=="6.1"){
+			Data=question_6(Data);
+		}*/
+		for (var key in Data){//guarda a key de maior valor
+			if (Data[key]>aux){
+				aux=Data[key];
+				nameKeySliced=key;
+			}
+		} 
+		for (var key in Data){//cria os dados do grafico
+		   if(key==nameKeySliced && column!="7.1" && column!="7.2"){
+			   Series.push({
+				   name:key,
+				   y:Data[key],
+				   sliced: true,
+		           selected: true
+			   });
+		   }
+		   else{// A questão 7 tem drilldown, por isso é diferente
+			  	if(column=="7.1"){
+				   if(key=="Yes"){
+					   Series.push({"name":key, "y":Data[key], drilldown: key});
+				   }
+				   else{
+					   Series.push({"name":key, "y":Data[key], drilldown: null});
+				   }
+				}else if (column=="7.2"){
+					Series.push([key, Data[key]]);
+					
+			   	}else{
+				   Series.push({"name":key, "y":Data[key]});
+			   	}
+		   	}
+		}
+	} else if(type=="Column"){//prepara o grafico de coluna
+		Series=[];
+		for(var key in Data){
+			Series.push([key,Data[key]]);
+		}
+		
+	}else if(type=="Bar"){
+		
+		var Series={"x":[],"y":[]};
+		for(var key in Data){
+			Series["x"].push(key);
+			Series["y"].push(Data[key]);
+		}
+		//console.log(Series);
+	}else if(type=="groupColumnChart"){
+		Series=Data;
+		//console.log(Data);
+	}
+	return Series;
+}
+/*
+function readCsvGithub(check){
+	var url = window.location.protocol+"//"+window.location.hostname+window.location.pathname.toString().replace("index.html", "");
+	url=url+"Mobile_Survey_GitHub_v4.csv";
+	//console.log("link: ", url);testar no localhost trocar url por "https://mobile--survey.herokuapp.com/Mobile_Survey_GitHub_v4.csv"
+	Papa.parse(url, {//read github csv
+					download: true,
+					header: true,
+					dynamicTyping: true,
+					delimiter:"|",
+					complete: function(results) {
+						if(check){
+							answers = results.data;
+							All();
+						}
+						//console.log("Finished:", results);
+				        githubAnswers=results.data;
+				      	}	
+		    		});
+	
+}
+
+function readCsvList(check){
+	var url_atual = window.location.protocol+"//"+window.location.hostname+window.location.pathname.toString().replace("index.html", "");
+	url=url_atual+"Mobile_Survey_Social_Network.csv";
+	//console.log("link: ", url) testat no localjost trocar url por "https://mobile--survey.herokuapp.com/Mobile_Survey_Social_Network.csv";
+	Papa.parse(url, {//read github csv
+					download: true,
+					header: true,
+					dynamicTyping: true,
+					delimiter:"|",
+					complete: function(results) {
+						if(check){
+							answers = results.data;
+							All();
+						}
+				        listAnswers = results.data;
+				      	}	
+		    		});
+	
+}
+
+function readCsvGithub2(check){
+	var url = window.location.protocol+"//"+window.location.hostname+window.location.pathname.toString().replace("index.html", "");
+	url=url+"Mobile_Survey_Follow_up_GitHub.csv";
+	//console.log("link: ", url);, depois inserir url abaixo para o deploy
+	//testar no local trocar url por "https://mobile--survey.herokuapp.com/Mobile_Survey_Follow_up_GitHub.csv"
+	Papa.parse(url, {//read github csv
+					download: true,
+					header: true,
+					dynamicTyping: true,
+					delimiter:"|",
+					complete: function(results) {
+						if(check){
+							answers = results.data;
+							All();
+						}
+				        githubAnswers2=results.data;
+				      	}	
+		    		});
+	
+}*/
+
+function readCsv(){
+	var url = window.location.protocol+"//"+window.location.hostname+window.location.pathname.toString().replace("index.html", "");
+	url=url+"Survey_IBM_BlueHack.csv";
+	//console.log("link: ", url);testar no localhost trocar url por "https://mobile--survey.herokuapp.com/Mobile_Survey_GitHub_v4.csv"
+	Papa.parse(url, {//read github csv
+					download: true,
+					header: true,
+					dynamicTyping: true,
+					delimiter:"|",
+					complete: function(results) {
+						answers = results.data;
+						All();
+				        
+				      	}	
+		    		});
+	
+}
+
+/*
+function makeVisibleDatasetOptions(){
+	document.getElementById("dataset").style.visibility="visible";
+	document.getElementById("formDataset").style.visibility="visible";
+}*/
+
+function start(){
+	//current="GitHub";
+	readCsv();
+}
+
+function All(){
+	//primeiro ler os dados todos
+	var Series, Series_drilldown;
+	
+	clearBox("container");
+	createBoxesCharts("1");//cria  div html com o id 1
+	alterHeight("1","300px")
+	Series=loadData("1.", "Pie");
+	pieChart("#1","1 - Qual a sua faixa etária?", Series);
+	
+	createBoxesCharts("2");//cria  div html com o id 1
+	alterHeight("2","300px")
+	Series=loadData("2.", "Bar");
+	barChart("#2","2 - Em qual área você atua?", Series);
+	
+	createBoxesCharts("4");//cria  div html com o id 1
+	alterHeight("4","300px")
+	Series=loadData("4.", "Pie");
+	pieChart("#4","4 - Indique o seu tempo de experiência na sua atividade relatada na questão anterior", Series);
+	
+	createBoxesCharts("5");//cria  div html com o id 1
+	alterHeight("5","300px")
+	Series=loadData("5.", "Pie");
+	pieChart("#5","5 - Você já participou de algum hackathon antes?", Series);
+	
+	createBoxesCharts("7");//cria  div html com o id 1
+	alterHeight("7","400px")
+	Series=loadData("7.", "groupColumnChart");
+	groupColumnChart("#7","7 - Você se preparou para o Blue|Hack 2017?", Series);
+	
+	/*
+	createBoxesCharts("3");
+	alterHeight("3","300px")
+	Series=loadData("3.", "Pie");//carrega os dados necessarios para grafico de pizza da questao 3. 
+	pieChart("#3", "3. Do you typically develop mobile apps in a team?", Series);//plot o grafico na div id 1 com titulo 3. (...) com os dados da Serie
+	createBoxesCharts("4");
+	alterHeight("4","300px")
+	Series=loadData("4.", "Pie");
+	pieChart("#4", "4. What platform have you most recently developed for?", Series);
+	
+	createBoxesCharts("5");
+	alterHeight("5","300px")
+	Series=loadData("5.1", "Pie");
+	pieChart("#5", "5. How many apps have you developed for that mobile platform?", Series);
+	createBoxesCharts("6");
+	alterHeight("6","300px")
+	Series=loadData("6.1", "Pie");
+	pieChart("#6", "6. How long (in months and years) have you been developing apps for that mobile platform?", Series);
+	createBoxesCharts("7");
+	
+	alterHeight("7","300px")
+	Series=loadData("7.1", "Pie");
+	SeriesDrill=loadData("7.2", "Pie");
+	pieChartWithDrill("#7", "7. Before developing for that platform, have you ever had any experience developing apps for other mobile platforms? If so, which one and for how long?", Series, SeriesDrill);
+	
+	createBoxesCharts("8");
+	alterMinHeight("8","500px");
+	Series=loadData("8.", "groupColumnChart");
+	groupColumnChart("#8","8. To what extent did the aspects below influence your decision to START developing for that platform?", Series);
+	
+	createBoxesCharts("9");
+	alterMinHeight("9","600px");
+	if (current!="GitHub2"){
+		Series=loadData("9.", "Bar");
+		barChart("#9","9. Which of the following aspects were most influential in your decision to START developing for that platform?", Series);	
+	}
+	else{
+		Series=loadData("9.", "groupColumnChart");
+		barStacked("#9","9. Which of the following aspects were most influential in your decision to START developing for that platform?", Series);	
+	}
+	;
+	
+	createBoxesCharts("11");
+	alterMinHeight("11","500px");
+	Series=loadData("11.", "groupColumnChart");
+	groupColumnChart("#11","11. To what extent did the aspects below influence your decision to KEEP developing for that platform?", Series);
+	
+	
+	createBoxesCharts("12");
+	alterMinHeight("12","500px");
+	if (current!="GitHub2"){
+		Series=loadData("12.", "Bar");
+		barChart("#12","12. Which of the following aspects were most influential in your decision to KEEP developing for that platform?", Series);
+		}
+	else{
+		Series=loadData("12.", "groupColumnChart");
+		barStacked("#12","12. Which of the following aspects were most influential in your decision to KEEP developing for that platform?", Series);
+	}*/
+	}
