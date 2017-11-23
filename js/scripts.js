@@ -827,6 +827,61 @@ function start(){
 	readCsv();
 }
 
+function createTable(id, t){
+	 // Create table.
+	 
+	 
+	c=document.getElementById("container");
+	linne=document.createElement("hr");
+	c.appendChild(linne)
+	
+	
+	var title = document.createElement('h4');
+	title.innerHTML = t;
+	c.appendChild(title); 
+	
+	var divRow = document.createElement("div");
+	divRow.class="row"
+	var divChart=document.createElement("div");
+	divChart.id=id;
+	divChart.style.width="100%";
+    divChart.style.height="300px";
+    divChart.style.overflow= "auto"
+	
+	divRow.appendChild(divChart)
+	c.appendChild(divRow) 
+	 
+	 
+	
+	
+    var table = document.createElement('table');
+    table.style.width="100%";
+    empty=0;
+    // Insert New Row for table at index 'i'.
+    for (i=0;i<Object.keys(answers).length;i++){
+		    if(answers[i][id+"."]!=null && answers[i][id+"."]!="" && answers[i][id+"."]!=" "){
+			    var row = table.insertRow(i-empty);
+			    
+			    if (((i+1-empty)%2)===0){
+			    	row.bgColor="#DCDCDC";
+			    }
+			    else{
+				    row.bgColor="#F5F5F5";
+			    }
+			    
+				var rowcol1 = row.insertCell(0);
+				rowcol1.style.paddingTop="6px";
+				rowcol1.style.paddingBottom="6px";
+				rowcol1.innerHTML = answers[i][id+"."];
+			}else{
+				empty++;
+			}
+		
+    }
+    
+    divChart.appendChild(table);
+}
+
 function All(){
 	//primeiro ler os dados todos
 	var Series, Series_drilldown;
@@ -842,6 +897,8 @@ function All(){
 	Series=loadData("2.", "Bar");
 	barChart("#2","2 - Em qual área você atua?", Series);
 	
+	createTable("3",  "3 - Qual é a sua principal atividade? Se for estudante, em qual instituição/curso?")
+	
 	createBoxesCharts("4");//cria  div html com o id 1
 	alterHeight("4","300px")
 	Series=loadData("4.", "Pie");
@@ -851,6 +908,8 @@ function All(){
 	alterHeight("5","300px")
 	Series=loadData("5.", "Pie");
 	pieChart("#5","5 - Você já participou de algum hackathon antes?", Series);
+	
+	createTable("6",  "6 - O que lhe motivou a participar do Blue|Hack 2017?");
 	
 	createBoxesCharts("7");//cria  div html com o id 1
 	alterHeight("7","400px")
@@ -862,82 +921,35 @@ function All(){
 	Series=loadData("8.", "groupColumnChart");
 	barStacked("#8","8 - Agora que o Blue|Hack terminou, você pretende utilizar alguma das tecnologias que foram apresentadas durante o mesmo?", Series);
 
+	createTable("9",  "9 - Conte-nos mais sobre a sua resposta anterior. Como você pretende utilizar a(s) tecnologia(s) acima?");
+
+
 	createBoxesCharts("10");//cria  div html com o id 1
 	alterHeight("10","500px")
 	Series=loadData("10.", "groupColumnChart");
 	groupColumnChart("#10","10 - Em que medida os aspectos abaixo influenciam você a utilizar as tecnologias selecionadas nas perguntas anteriores?", Series);
+	
+	createTable("11",  "11 - Você pode nos dar mais detalhes sobre a sua resposta anterior?");
 	
 	createBoxesCharts("12");//cria  div html com o id 1
 	alterHeight("12","450px")
 	Series=loadData("12.", "groupColumnChart");
 	barStacked("#12","12 - A organização do Blue|Hack 2017 disponibilizou vários recursos antes e durante o evento. Quão úteis foram estes recursos pra você?", Series);
 	
+	createTable("13",  "13 - Por favor, explique a sua resposta anterior");
+	
 	createBoxesCharts("14");//cria  div html com o id 1
 	alterHeight("14","450px")
 	Series=loadData("14.", "Bar");
 	barChart("#14","14 - Em sua opinião, qual foi o ponto alto do Blue|Hack 2017? Marque no máximo 3 respostas.", Series);
+
+	createTable("15",  "15 - Você pretende participar de outro Blue|Hack no futuro?");
 
 	createBoxesCharts("16");//cria  div html com o id 1
 	alterHeight("16","300px")
 	Series=loadData("16.", "Pie");
 	pieChart("#16","16 - Dê uma nota geral para o Blue|Hack 2017.", Series);
 	
-	/*
-	createBoxesCharts("3");
-	alterHeight("3","300px")
-	Series=loadData("3.", "Pie");//carrega os dados necessarios para grafico de pizza da questao 3. 
-	pieChart("#3", "3. Do you typically develop mobile apps in a team?", Series);//plot o grafico na div id 1 com titulo 3. (...) com os dados da Serie
-	createBoxesCharts("4");
-	alterHeight("4","300px")
-	Series=loadData("4.", "Pie");
-	pieChart("#4", "4. What platform have you most recently developed for?", Series);
+	createTable("17",  "17 - Por favor, explique sua resposta anterior. O que foi bom e o que foi ruim?");
 	
-	createBoxesCharts("5");
-	alterHeight("5","300px")
-	Series=loadData("5.1", "Pie");
-	pieChart("#5", "5. How many apps have you developed for that mobile platform?", Series);
-	createBoxesCharts("6");
-	alterHeight("6","300px")
-	Series=loadData("6.1", "Pie");
-	pieChart("#6", "6. How long (in months and years) have you been developing apps for that mobile platform?", Series);
-	createBoxesCharts("7");
-	
-	alterHeight("7","300px")
-	Series=loadData("7.1", "Pie");
-	SeriesDrill=loadData("7.2", "Pie");
-	pieChartWithDrill("#7", "7. Before developing for that platform, have you ever had any experience developing apps for other mobile platforms? If so, which one and for how long?", Series, SeriesDrill);
-	
-	createBoxesCharts("8");
-	alterMinHeight("8","500px");
-	Series=loadData("8.", "groupColumnChart");
-	groupColumnChart("#8","8. To what extent did the aspects below influence your decision to START developing for that platform?", Series);
-	
-	createBoxesCharts("9");
-	alterMinHeight("9","600px");
-	if (current!="GitHub2"){
-		Series=loadData("9.", "Bar");
-		barChart("#9","9. Which of the following aspects were most influential in your decision to START developing for that platform?", Series);	
-	}
-	else{
-		Series=loadData("9.", "groupColumnChart");
-		barStacked("#9","9. Which of the following aspects were most influential in your decision to START developing for that platform?", Series);	
-	}
-	;
-	
-	createBoxesCharts("11");
-	alterMinHeight("11","500px");
-	Series=loadData("11.", "groupColumnChart");
-	groupColumnChart("#11","11. To what extent did the aspects below influence your decision to KEEP developing for that platform?", Series);
-	
-	
-	createBoxesCharts("12");
-	alterMinHeight("12","500px");
-	if (current!="GitHub2"){
-		Series=loadData("12.", "Bar");
-		barChart("#12","12. Which of the following aspects were most influential in your decision to KEEP developing for that platform?", Series);
-		}
-	else{
-		Series=loadData("12.", "groupColumnChart");
-		barStacked("#12","12. Which of the following aspects were most influential in your decision to KEEP developing for that platform?", Series);
-	}*/
 	}
