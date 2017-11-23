@@ -902,54 +902,54 @@ function All(){
 	createBoxesCharts("4");//cria  div html com o id 1
 	alterHeight("4","300px")
 	Series=loadData("4.", "Pie");
-	pieChart("#4","4 - Indique o seu tempo de experiência na sua atividade relatada na questão anterior", Series);
+	pieChart("#4","3 - Indique o seu tempo de experiência na sua atividade relatada na questão anterior", Series);
 	
 	createBoxesCharts("5");//cria  div html com o id 1
 	alterHeight("5","300px")
 	Series=loadData("5.", "Pie");
-	pieChart("#5","5 - Você já participou de algum hackathon antes?", Series);
+	pieChart("#5","4 - Você já participou de algum hackathon antes?", Series);
 	
-	createTable("6",  "6 - O que lhe motivou a participar do Blue|Hack 2017?");
+	createTable("6",  "5 - O que lhe motivou a participar do Blue|Hack 2017?");
 	
 	createBoxesCharts("7");//cria  div html com o id 1
 	alterHeight("7","400px")
 	Series=loadData("7.", "groupColumnChart");
-	groupColumnChart("#7","7 - Você se preparou para o Blue|Hack 2017?", Series);
+	groupColumnChart("#7","6 - Você se preparou para o Blue|Hack 2017?", Series);
 	
 	createBoxesCharts("8");//cria  div html com o id 1
 	alterHeight("8","450px")
 	Series=loadData("8.", "groupColumnChart");
-	barStacked("#8","8 - Agora que o Blue|Hack terminou, você pretende utilizar alguma das tecnologias que foram apresentadas durante o mesmo?", Series);
+	barStacked("#8","7 - Agora que o Blue|Hack terminou, você pretende utilizar alguma das tecnologias que foram apresentadas durante o mesmo?", Series);
 
-	createTable("9",  "9 - Conte-nos mais sobre a sua resposta anterior. Como você pretende utilizar a(s) tecnologia(s) acima?");
+	createTable("9",  "8 - Conte-nos mais sobre a sua resposta anterior. Como você pretende utilizar a(s) tecnologia(s) acima?");
 
 
 	createBoxesCharts("10");//cria  div html com o id 1
 	alterHeight("10","500px")
 	Series=loadData("10.", "groupColumnChart");
-	groupColumnChart("#10","10 - Em que medida os aspectos abaixo influenciam você a utilizar as tecnologias selecionadas nas perguntas anteriores?", Series);
+	groupColumnChart("#10","9 - Em que medida os aspectos abaixo influenciam você a utilizar as tecnologias selecionadas nas perguntas anteriores?", Series);
 	
-	createTable("11",  "11 - Você pode nos dar mais detalhes sobre a sua resposta anterior?");
+	createTable("11",  "10 - Você pode nos dar mais detalhes sobre a sua resposta anterior?");
 	
 	createBoxesCharts("12");//cria  div html com o id 1
 	alterHeight("12","450px")
 	Series=loadData("12.", "groupColumnChart");
-	barStacked("#12","12 - A organização do Blue|Hack 2017 disponibilizou vários recursos antes e durante o evento. Quão úteis foram estes recursos pra você?", Series);
+	barStacked("#12","11 - A organização do Blue|Hack 2017 disponibilizou vários recursos antes e durante o evento. Quão úteis foram estes recursos pra você?", Series);
 	
-	createTable("13",  "13 - Por favor, explique a sua resposta anterior");
+	createTable("13",  "12 - Por favor, explique a sua resposta anterior");
 	
 	createBoxesCharts("14");//cria  div html com o id 1
 	alterHeight("14","450px")
 	Series=loadData("14.", "Bar");
-	barChart("#14","14 - Em sua opinião, qual foi o ponto alto do Blue|Hack 2017? Marque no máximo 3 respostas.", Series);
+	barChart("#14","13 - Em sua opinião, qual foi o ponto alto do Blue|Hack 2017? Marque no máximo 3 respostas.", Series);
 
-	createTable("15",  "15 - Você pretende participar de outro Blue|Hack no futuro?");
+	createTable("15",  "14 - Você pretende participar de outro Blue|Hack no futuro?");
 
 	createBoxesCharts("16");//cria  div html com o id 1
 	alterHeight("16","300px")
 	Series=loadData("16.", "Pie");
-	pieChart("#16","16 - Dê uma nota geral para o Blue|Hack 2017.", Series);
+	pieChart("#16","15 - Dê uma nota geral para o Blue|Hack 2017.", Series);
 	
-	createTable("17",  "17 - Por favor, explique sua resposta anterior. O que foi bom e o que foi ruim?");
+	createTable("17",  "16 - Por favor, explique sua resposta anterior. O que foi bom e o que foi ruim?");
 	
 	}
