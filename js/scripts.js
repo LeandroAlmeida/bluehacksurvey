@@ -217,7 +217,8 @@ function getSeriesTo9and12(Series,id, type){
 	id=id.replace("#", "");
 	id+=".";//Pega o id e transforma no formato da question na planilha, ex: #9->9. e depois no for fica 9.1 até 9.13
 	listResul=[];
-	for(i=1;i<=4; i++){
+	
+	for(i=1;i<=Object.keys(Series).length; i++){
 		listResul.push(Series[id+i][type]);
 	}
 	return listResul;
@@ -231,8 +232,25 @@ function getSeriesToGroupColumnChart(id, Series){
 					name:"Parcialmente definido(a)",
 					data:getSeriesTo9and12(Series, id,"Parcialmente definido(a)")
 				}, {
-					name:"Somewhat influential",
+					name:"Indefinido(a)",
 					data:getSeriesTo9and12(Series, id,"Indefinido(a)")
+				}];
+	}
+	if(id=="#10"){
+		return [{	name: "Indiferente",
+					data: getSeriesTo9and12(Series, id,"Indiferente")
+				}, {
+					name:"Pouco influente",
+					data:getSeriesTo9and12(Series, id,"Pouco influente")
+				}, {
+					name:"Moderadamente influente",
+					data:getSeriesTo9and12(Series, id,"Moderadamente influente")
+				}, {
+					name:"Muito influente",
+					data:getSeriesTo9and12(Series, id,"Muito influente")
+				}, {
+					name:"Extremamente influente",
+					data:getSeriesTo9and12(Series, id,"Extremamente influente")
 				}];
 	}
 		
@@ -242,11 +260,17 @@ function getCategoriesTogroupColumnChart(id){
 	if(id=="#7"){
 		return["Eu já tinha uma ideia", "Eu já tinha uma equipe", "Eu já tinha um desafio", "Eu já tinha uma tecnologia"];
 	}
+	else if(id=="#10"){
+		return ["Aspectos Técnicos","Aspectos de Negóci","Aspectos Sociais","Aspectos Pessoais"];
+	}
 	
 }
 function getSubTitleToGroupColumnChart(id){
 	if (id=="#7"){
 		return "";
+	}
+	if (id=="#10"){
+		return "<b>Aspectos Técnicos:</b> linguagem de programação empregada, disponibilidade de ferramentas, tecnologias, etc. <br /><b>Aspectos de Negócios:</b> custo da ferramenta, monetização, aceitação/tendência de mercado, etc.<br /><b>Aspectos Sociais:</b> contatos que conhecem a tecnologia, amigos, professores, disponibilidade de informação nas redes sociais, etc.<br /><b>Aspectos Pessoais:</b> desafio, curiosidade de aprender, superação dos meus limites, etc.";
 	}
 }
 function groupColumnChart(id,t,Series){
@@ -297,18 +321,56 @@ function groupColumnChart(id,t,Series){
 	    });
 	});	
 }
-function getSeriesToBarStacked(Series, id, type){
-	
-	//Coloquei 13, mas podeia ser Object.keys(Series).length caso tenham tam diferentes
-	id=id.replace("#", "");
-	id+=".";//Pega o id e transforma no formato da question na planilha, ex: #9->9. e depois no for fica 9.1 até 9.13
-	listResul=[];
-	for(i=1;i<=14; i++){
-		listResul.push(Series[id+i][type]);
+
+
+function getBarStackedCategories(id){
+	if(id=="#8"){
+		return ["IBM Cloud (Chatbot)", "IBM Cloud (BlockChain)", "IBM Cloud (Outros serviços)", "PowerAI e PowerAI Vision", "Watson", "Node-RED", "DataScience Explorer", "Outra tecnologia"];
 	}
-	return listResul;
-	
+	else if (id=="#12"){
+		return ["Meetups (antes do evento)", "Website com os desafios", "Canais do Slack", "Mentores", "Juízes", "Apresentações/palestras", "Workshops"];
+	}
 }
+function getSeriesToBarStacked(id, Series){
+		if (id=="#8"){
+			return [ {
+			        name: "Definitivamente Sim",
+			        data: getSeriesTo9and12(Series, id,"Definitivamente Sim")
+			    }, {
+			        name: "Muito provável",
+			        data: getSeriesTo9and12(Series, id,"Muito provável")
+			    }, {
+			        name: "Neutro",
+			        data: getSeriesTo9and12(Series, id,"Neutro")
+			    }, {
+			        name: "Pouco provável",
+			        data: getSeriesTo9and12(Series, id,"Pouco provável")
+			    }, {
+		        name: "Definitivamente Não",
+		        data: getSeriesTo9and12(Series, id,"Definitivamente Não")
+			    }, {
+			        name: "Não conheço",
+			        data: getSeriesTo9and12(Series, id,"Não conheço")
+			    }]
+		}else if(id=="#12"){
+			return [ {
+			        name: "Extremamente útil",
+			        data: getSeriesTo9and12(Series, id,"Extremamente útil")
+			    }, {
+			        name: "Muito útil",
+			        data: getSeriesTo9and12(Series, id,"Muito útil")
+			    }, {
+			        name: "Moderadamente útil",
+			        data: getSeriesTo9and12(Series, id,"Moderadamente útil")
+			    }, {
+		        name: "Pouco útil",
+		        data: getSeriesTo9and12(Series, id,"Pouco útil")
+			    }, {
+			        name: "Indiferente",
+			        data: getSeriesTo9and12(Series, id,"Indiferente")
+			    }]
+			}
+	}
 function barStacked(id,t,Series){
 	$(function () {
 		$(id).highcharts({
@@ -319,19 +381,12 @@ function barStacked(id,t,Series){
 		        text: t
 		    },
 		    xAxis: {
-		        categories: ['Programming language(s) used to develop for that platform', 'Software development tools and SDKs available to develop for that platform', 
-		        			'Services, APIs and libraries available to develop for that platform', 'Documentation available to develop for that platform', 
-		        			'Availability of different devices from different manufacturers', 'Availability of different devices from different manufacturers',
-		        			'Compatibility with tools that allow for multi-platform development (e.g., PhoneGap, Xamarim, etc)','Market share of the platform.',
-		        			'Platform business model including fees, licensing model, partnerships, etc','Expected financial return from the platform',
-		        			'Requirements for distributing applications to users of that platform','Extensive and supportive ONLINE community (e.g. online groups, forums, etc)',
-		        			'Extensive and supportive LOCAL community (e.g. local meetups, friends and co-workers who develop for the same platform).','Platform evangelists.',
-		        			"I did NOT have a choice on selecting the platform (e.g., this was my company's decision, or a customer requirement, etc)"]
+		        categories: getBarStackedCategories(id)
 		    },
 		    yAxis: {
 		        min: 0,
 		        title: {
-		            text: 'Total fruit consumption'
+		            text: 'Amount'
 		        }
 		    },
 		    legend: {
@@ -342,22 +397,7 @@ function barStacked(id,t,Series){
 		            stacking: 'normal'
 		        }
 		    },
-		    series: [{
-		        name: "Very influential",
-		        data: getSeriesTo9and12(Series, id,"Very influential")
-			    }, {
-			        name: "Influential",
-			        data: getSeriesTo9and12(Series, id,"Influential")
-			    }, {
-			        name: "Somewhat influential",
-			        data: getSeriesTo9and12(Series, id,"Somewhat influential")
-			    }, {
-			        name: "Not influential",
-			        data: getSeriesTo9and12(Series, id,"Not influential")
-			    }, {
-			        name: "Not at all influential",
-			        data: getSeriesTo9and12(Series, id,"Not at all influential")
-			    }]
+		    series: getSeriesToBarStacked(id, Series)
 		});
 	});
 }
@@ -567,17 +607,11 @@ function getData(column,type){
 		
 	}else if(type=="groupColumnChart"){
 		var dataTemp, columnName;
-		if(column=="8." || column=="11."){
-			aspects=["Technical_aspects","Business_aspects","Social_Aspects"];
-			for(var i=0;i<aspects.length;i++){
-				columnName=column+aspects[i];
-				if(current=="GitHub"){
-					dataTemp={"Very influential": 0, "Somewhat influential": 0, "Not at all influential": 0};
-				}
-				else{
-					dataTemp={"Very influential": 0, "Influential":0, "Somewhat influential": 0, "Not influential":0, "Not at all influential": 0};
-				}
-					
+		if (column=="7."){
+			
+			for(var i=1;i<=4;i++){
+				columnName=column+i;//9.1 ate 9.13 e 12.1 ate 12.13, colunas da planilha
+				dataTemp={"Bem definido(a)": 0, "Parcialmente definido(a)":0, "Indefinido(a)": 0};	
 				for (var j = 0; j < answers.length; j++){
 					if(answers[j][columnName]!=null && answers[j][columnName]!=""){
 						if(filters(j)){
@@ -585,13 +619,42 @@ function getData(column,type){
 						}
 					}
 				}
-				data[aspects[i]]=dataTemp;
+				data[columnName]=dataTemp;
 			}
-		}else if (column=="7."){
+		}else if (column=="8."){
+			
+			for(var i=1;i<=8;i++){
+				columnName=column+i;//9.1 ate 9.13 e 12.1 ate 12.13, colunas da planilha
+				dataTemp={"Não conheço":0, "Definitivamente Não": 0, "Pouco provável":0, "Neutro": 0, "Muito provável": 0, "Definitivamente Sim": 0};	
+				for (var j = 0; j < answers.length; j++){
+					if(answers[j][columnName]!=null && answers[j][columnName]!=""){
+						if(filters(j)){
+							dataTemp[answers[j][columnName]]+=1;
+						}
+					}
+				}
+				data[columnName]=dataTemp;
+			}
+		}else if (column=="10."){
 			
 			for(var i=1;i<=4;i++){
 				columnName=column+i;//9.1 ate 9.13 e 12.1 ate 12.13, colunas da planilha
-				dataTemp={"Bem definido(a)": 0, "Parcialmente definido(a)":0, "Indefinido(a)": 0};	
+				dataTemp={"Indiferente": 0, "Pouco influente":0, "Moderadamente influente": 0, "Muito influente": 0, "Extremamente influente": 0};	
+				for (var j = 0; j < answers.length; j++){
+					if(answers[j][columnName]!=null && answers[j][columnName]!=""){
+						if(filters(j)){
+							dataTemp[answers[j][columnName]]+=1;
+						}
+					}
+				}
+				data[columnName]=dataTemp;
+			}
+		}
+		else if (column=="12."){
+			
+			for(var i=1;i<=7;i++){
+				columnName=column+i;//9.1 ate 9.13 e 12.1 ate 12.13, colunas da planilha
+				dataTemp={"Indiferente": 0, "Pouco útil":0, "Moderadamente útil": 0, "Muito útil": 0, "Extremamente útil": 0};	
 				for (var j = 0; j < answers.length; j++){
 					if(answers[j][columnName]!=null && answers[j][columnName]!=""){
 						if(filters(j)){
@@ -793,6 +856,31 @@ function All(){
 	alterHeight("7","400px")
 	Series=loadData("7.", "groupColumnChart");
 	groupColumnChart("#7","7 - Você se preparou para o Blue|Hack 2017?", Series);
+	
+	createBoxesCharts("8");//cria  div html com o id 1
+	alterHeight("8","450px")
+	Series=loadData("8.", "groupColumnChart");
+	barStacked("#8","8 - Agora que o Blue|Hack terminou, você pretende utilizar alguma das tecnologias que foram apresentadas durante o mesmo?", Series);
+
+	createBoxesCharts("10");//cria  div html com o id 1
+	alterHeight("10","500px")
+	Series=loadData("10.", "groupColumnChart");
+	groupColumnChart("#10","10 - Em que medida os aspectos abaixo influenciam você a utilizar as tecnologias selecionadas nas perguntas anteriores?", Series);
+	
+	createBoxesCharts("12");//cria  div html com o id 1
+	alterHeight("12","450px")
+	Series=loadData("12.", "groupColumnChart");
+	barStacked("#12","12 - A organização do Blue|Hack 2017 disponibilizou vários recursos antes e durante o evento. Quão úteis foram estes recursos pra você?", Series);
+	
+	createBoxesCharts("14");//cria  div html com o id 1
+	alterHeight("14","450px")
+	Series=loadData("14.", "Bar");
+	barChart("#14","14 - Em sua opinião, qual foi o ponto alto do Blue|Hack 2017? Marque no máximo 3 respostas.", Series);
+
+	createBoxesCharts("16");//cria  div html com o id 1
+	alterHeight("16","300px")
+	Series=loadData("16.", "Pie");
+	pieChart("#16","16 - Dê uma nota geral para o Blue|Hack 2017.", Series);
 	
 	/*
 	createBoxesCharts("3");
